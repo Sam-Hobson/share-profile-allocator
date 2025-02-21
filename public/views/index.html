@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="color-scheme" content="light dark">
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
+	<script src="../js/theme-switcher.js" defer></script>
+
+	<title>Hello world!</title>
+</head>
+
+<body>
+	<!-- Header -->
+	<header class="container">
+		<hgroup>
+			<h1>Pico</h1>
+			<p>A pure HTML example, without dependencies.</p>
+		</hgroup>
+		<nav>
+			<ul>
+				<li>
+					<details class="dropdown">
+						<summary role="button" class="secondary">Theme</summary>
+						<ul>
+							<li><a href="#" data-theme-switcher="auto">Auto</a></li>
+							<li><a href="#" data-theme-switcher="light">Light</a></li>
+							<li><a href="#" data-theme-switcher="dark">Dark</a></li>
+						</ul>
+					</details>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	<!-- ./ Header -->
+
+	<main class="container">
+
+		<form role="search" style="max-width: 600px;">
+			<input name="search" type="search" placeholder="VAS, VGS, DHHF..." />
+			<input type="submit" value="Search" />
+		</form>
+
+		<!-- Tables -->
+		<section id="tables">
+			<div class="overflow-auto">
+				<table class="striped">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Heading1</th>
+							<th scope="col">Heading2</th>
+							<th scope="col">Heading3</th>
+							<th scope="col">Heading4</th>
+							<th scope="col">Heading5</th>
+							<th scope="col">Heading6</th>
+							<th scope="col">Heading7</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">1</th>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+						</tr>
+						<tr>
+							<th scope="row">2</th>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+						</tr>
+						<tr>
+							<th scope="row">3</th>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+							<td>Cell</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+		<!-- ./ Tables -->
+	</main>
+
+</body>
+
+</html>
