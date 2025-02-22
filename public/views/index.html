@@ -7,7 +7,10 @@
 	<meta name="color-scheme" content="light dark">
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
-	<script src="../js/theme-switcher.js" defer></script>
+	<link rel="stylesheet" href="../styles/index.css" />
+
+	<script src="../js/theme_switcher.js" defer></script>
+	<script src="../js/search_box_dropdown.js" defer></script>
 
 	<title>Hello world!</title>
 </head>
@@ -38,9 +41,12 @@
 
 	<main class="container">
 
-		<form role="search" style="max-width: 600px;">
-			<input name="search" type="search" placeholder="VAS, VGS, DHHF..." />
-			<input type="submit" value="Search" />
+		<form role="search" id="ticker-search-box-form" style="">
+			<div class="dropdown-container">
+				<input type="search" id="ticker-search-box" placeholder="VAS, VGS, DHHF..." autocomplete="off">
+				<div id="ticker-search-dropdown-list" class="dropdown-list"></div>
+			</div>
+			<input type="submit" value="Search">
 		</form>
 
 		<!-- Tables -->

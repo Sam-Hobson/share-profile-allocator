@@ -1,0 +1,30 @@
+.dropdown-container {
+	position: relative;
+	width: 100%;
+}
+
+.dropdown-list {
+	position: absolute;
+	width: 100%;
+	background: var(--pico-form-element-background-color);
+	border: 1px solid var(--pico-form-element-border-color);
+	color: var(--pico-form-element-color);
+	border-top: none;
+	max-height: 150px;
+	overflow-y: auto;
+	display: none;
+}
+
+.dropdown-list div {
+	padding: 0.5rem;
+	cursor: pointer;
+}
+
+.dropdown-list div:hover,
+.dropdown-list .active {
+	background: var(--pico-form-element-selected-background-color);
+}
+
+#ticker-search-box-form {
+	max-width: 600px;
+}
