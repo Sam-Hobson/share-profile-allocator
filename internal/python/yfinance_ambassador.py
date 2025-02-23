@@ -4,8 +4,8 @@ import grpc
 import time
 import yfinance as yf
 
-import example_pb2
-import example_pb2_grpc
+import shareProfileAllocator_pb2
+import shareProfileAllocator_pb2_grpc
 
 CACHE_EXPIRATION = 5400  # 1.5 hours
 CACHE_CLEAR_INTERVAL = 172800  # 48 hours
@@ -49,15 +49,15 @@ def clear_cache():
         print(f"Cache cleared automatically, {num_items} items removed")
 
 
-class ShareDataService(example_pb2_grpc.ShareAPIServicer):
+class ShareDataService(shareProfileAllocator_pb2_grpc.ShareAPIServicer):
     def GetDataForTicker(self, request, context):
         share_data = get_share_info(request.name)
-        return example_pb2.ShareData(**share_data)
+        return shareProfileAllocator_pb2.ShareData(**share_data)
 
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
-    example_pb2_grpc.add_ShareAPIServicer_to_server(ShareDataService(), server)
+    shareProfileAllocator_pb2_grpc.add_ShareAPIServicer_to_server(ShareDataService(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
     print("Server started on port 50051")

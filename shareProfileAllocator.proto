@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package shareprofileallocator;
+option go_package = "internal/grpc/generated/go";
+
+service ShareAPI {
+  rpc GetDataForTicker (Ticker) returns (ShareData) {}
+}
+
+message Ticker {
+  string name = 1;
+}
+
+// Share data is a JSON object
+message ShareData {
+  bytes data = 1;
+  string phone = 2;
+  repeated string companyOfficers = 3;
+  repeated string executiveTeam = 4;
+  int32 maxAge = 5;
+  int32 priceHint = 6;
+  float previousClose = 7;
+  float open = 8;
+  float dayLow = 9;
+  float dayHigh = 10;
+  float regularMarketPreviousClose = 11;
+  float regularMarketOpen = 12;
+  float regularMarketDayLow = 13;
+  float regularMarketDayHigh = 14;
+  float trailingPE = 15;
+  int32 volume = 16;
+  int32 regularMarketVolume = 17;
+  int32 averageVolume = 18;
+  int32 averageVolume10days = 19;
+  int32 averageDailyVolume10Day = 20;
+  float bid = 21;
+  float ask = 22;
+  float bidSize = 23;  // TODO: Figure this one out
+  float askSize = 24;  // TODO: Figure this one out
+  float yield = 25;
+  int64 totalAssets = 26;
+  float fiftyTwoWeekLow = 27;
+  float fiftyTwoWeekHigh = 28;
+  float fiftyDayAverage = 29;
+  float twoHundredDayAverage = 30;
+  float navPrice = 31;
+  string currency = 32;
+  bool tradeable = 33;
+  float ytdReturn = 34;
+  float beta3Year = 35;
+  string fundFamily = 36;
+  int64 fundInceptionDate = 37;
+  string legalType = 38;
+  float threeYearAverageReturn = 39;
+  float fiveYearAverageReturn = 40;
+  string quoteType = 41;
+  string symbol = 42;
+  string language = 43;
+  string region = 44;
+  string typeDisp = 45;
+  string quoteSourceName = 46;
+  bool triggerable = 47;
+  string customPriceAlertConfidence = 48;
+  string marketState = 49;
+  repeated string corporateActions = 50;
+  int64 regularMarketTime = 51;
+  string exchange = 52;
+  string messageBoardId = 53;
+  string exchangeTimezoneName = 54;
+  string exchangeTimezoneShortName = 55;
+  int64 gmtOffSetMilliseconds = 56;
+  string market = 57;
+  bool esgPopulated = 58;
+  string fullExchangeName = 59;
+  int32 averageDailyVolume3Month = 60;
+  float fiftyTwoWeekLowChange = 61;
+  float fiftyTwoWeekLowChangePercent = 62;
+  string fiftyTwoWeekRange = 63;
+  float fiftyTwoWeekHighChange = 64;
+  float fiftyTwoWeekHighChangePercent = 65;
+  float fiftyTwoWeekChangePercent = 66;
+  float dividendYield = 67;
+  float trailingThreeMonthReturns = 68;
+  float trailingThreeMonthNavReturns = 69;
+  double netAssets = 70;
+  float epsTrailingTwelveMonths = 71;
+  bool hasPrePostMarketData = 72;
+  int64 firstTradeDateMilliseconds = 73;
+  float regularMarketChange = 74;
+  string regularMarketDayRange = 75;
+  string shortName = 76;
+  string longName = 77;
+  float regularMarketChangePercent = 78;
+  float regularMarketPrice = 79;
+  float twoHundredDayAverageChange = 80;
+  float twoHundredDayAverageChangePercent = 81;
+  float netExpenseRatio = 82;
+  int32 sourceInterval = 83;
+  int32 exchangeDataDelayedBy = 84;
+  float fiftyDayAverageChange = 85;
+  float fiftyDayAverageChangePercent = 86;
+  bool cryptoTradeable = 87;
+  string trailingPegRatio = 88;
+}
+

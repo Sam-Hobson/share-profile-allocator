@@ -72,14 +72,14 @@ __check_defined = \
 .PHONY: generate-python-protobuf
 generate-python-protobuf:  # Generate protobuf files for the Python server
 	@$(call announce_step, "Generate Python protobuf files", { \
-		python3 -m grpc_tools.protoc -I. --python_out=./internal/python/ --grpc_python_out=./internal/python/ ./example.proto; \
+		python3 -m grpc_tools.protoc -I. --python_out=./internal/python/ --grpc_python_out=./internal/python/ ./shareProfileAllocator.proto; \
 	})
 
 
 .PHONY: generate-go-protobuf
 generate-go-protobuf:  # Generate protobuf files for the Go server
 	@$(call announce_step, "Generate Python protobuf files", { \
-		protoc --go_out=. --go-grpc_out=. example.proto; \
+		protoc --go_out=. --go-grpc_out=. ./shareProfileAllocator.proto; \
 	})
 
 

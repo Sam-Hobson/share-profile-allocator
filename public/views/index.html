@@ -1,3 +1,5 @@
+{{ block "root" . }}
+
 <!doctype html>
 <html lang="en">
 
@@ -6,11 +8,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="color-scheme" content="light dark">
 
+	<!-- Pico css -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
-	<link rel="stylesheet" href="../styles/index.css" />
 
-	<script src="../js/theme_switcher.js" defer></script>
-	<script src="../js/search_box_dropdown.js" defer></script>
+	<!-- htmx -->
+	<script src="https://unpkg.com/htmx.org@2.0.4"
+		integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+		crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="/public/styles/index.css" />
+	<script src="/public/js/theme_switcher.js" defer></script>
+	<script src="/public/js/search_box_dropdown.js" defer></script>
 
 	<title>Hello world!</title>
 </head>
@@ -41,9 +49,9 @@
 
 	<main class="container">
 
-		<form role="search" id="ticker-search-box-form" style="">
+		<form role="search" id="ticker-search-box-form" hx-post="/sharedata" hx-target="#share-table-body" hx-swap="afterbegin">
 			<div class="dropdown-container">
-				<input type="search" id="ticker-search-box" placeholder="VAS, VGS, DHHF..." autocomplete="off">
+				<input name="ticker"type="search" id="ticker-search-box" placeholder="VAS, VGS, DHHF..." autocomplete="off" />
 				<div id="ticker-search-dropdown-list" class="dropdown-list"></div>
 			</div>
 			<input type="submit" value="Search">
@@ -53,7 +61,7 @@
 		<section id="tables">
 			<div class="overflow-auto">
 				<table class="striped">
-					<thead>
+					<thead id="share-table-head">
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">Heading1</th>
@@ -65,7 +73,7 @@
 							<th scope="col">Heading7</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="share-table-body">
 						<tr>
 							<th scope="row">1</th>
 							<td>Cell</td>
@@ -86,16 +94,6 @@
 							<td>Cell</td>
 							<td>Cell</td>
 						</tr>
-						<tr>
-							<th scope="row">3</th>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -106,3 +104,18 @@
 </body>
 
 </html>
+
+{{ end }}
+
+{{ block "shareTableRow" . }}
+<tr>
+	<th scope="row">1</th>
+	<td>{{ .GetPrettySymbol }}</td>
+	<td>{{ .GetAsk }}</td>
+	<td>{{ .GetTrailingPE }}</td>
+	<td>Cell</td>
+	<td>Cell</td>
+	<td>Cell</td>
+	<td>Cell</td>
+</tr>
+{{ end }}

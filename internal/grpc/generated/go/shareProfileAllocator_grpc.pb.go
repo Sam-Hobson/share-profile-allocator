@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v3.12.4
-// source: example.proto
+// source: shareProfileAllocator.proto
 
 package _go
 
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ShareAPI_GetDataForTicker_FullMethodName = "/example.ShareAPI/GetDataForTicker"
+	ShareAPI_GetDataForTicker_FullMethodName = "/shareprofileallocator.ShareAPI/GetDataForTicker"
 )
 
 // ShareAPIClient is the client API for ShareAPI service.
@@ -108,7 +108,7 @@ func _ShareAPI_GetDataForTicker_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ShareAPI_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "example.ShareAPI",
+	ServiceName: "shareprofileallocator.ShareAPI",
 	HandlerType: (*ShareAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -117,5 +117,5 @@ var ShareAPI_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "example.proto",
+	Metadata: "shareProfileAllocator.proto",
 }

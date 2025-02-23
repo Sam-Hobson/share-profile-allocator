@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-import example_pb2 as example__pb2
+import shareProfileAllocator_pb2 as shareProfileAllocator__pb2
 
 GRPC_GENERATED_VERSION = '1.70.0'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in example_pb2_grpc.py depends on'
+        + f' but the generated code in shareProfileAllocator_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -35,9 +35,9 @@ class ShareAPIStub(object):
             channel: A grpc.Channel.
         """
         self.GetDataForTicker = channel.unary_unary(
-                '/example.ShareAPI/GetDataForTicker',
-                request_serializer=example__pb2.Ticker.SerializeToString,
-                response_deserializer=example__pb2.ShareData.FromString,
+                '/shareprofileallocator.ShareAPI/GetDataForTicker',
+                request_serializer=shareProfileAllocator__pb2.Ticker.SerializeToString,
+                response_deserializer=shareProfileAllocator__pb2.ShareData.FromString,
                 _registered_method=True)
 
 
@@ -55,14 +55,14 @@ def add_ShareAPIServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetDataForTicker': grpc.unary_unary_rpc_method_handler(
                     servicer.GetDataForTicker,
-                    request_deserializer=example__pb2.Ticker.FromString,
-                    response_serializer=example__pb2.ShareData.SerializeToString,
+                    request_deserializer=shareProfileAllocator__pb2.Ticker.FromString,
+                    response_serializer=shareProfileAllocator__pb2.ShareData.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'example.ShareAPI', rpc_method_handlers)
+            'shareprofileallocator.ShareAPI', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('example.ShareAPI', rpc_method_handlers)
+    server.add_registered_method_handlers('shareprofileallocator.ShareAPI', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -83,9 +83,9 @@ class ShareAPI(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/example.ShareAPI/GetDataForTicker',
-            example__pb2.Ticker.SerializeToString,
-            example__pb2.ShareData.FromString,
+            '/shareprofileallocator.ShareAPI/GetDataForTicker',
+            shareProfileAllocator__pb2.Ticker.SerializeToString,
+            shareProfileAllocator__pb2.ShareData.FromString,
             options,
             channel_credentials,
             insecure,
