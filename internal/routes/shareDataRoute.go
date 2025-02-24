@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"share-profile-allocator/internal/grpc"
+	"share-profile-allocator/internal/session"
 	"share-profile-allocator/internal/utils"
 	"time"
 
@@ -12,8 +13,15 @@ import (
 
 const RequestTickerDataTimeout = 2 * time.Second
 
-func GetShareDataRoute() echo.HandlerFunc {
+func GetShareDataRoute(sessionManager *session.SessionManager) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		_, err := sessionManager.GetSession(c)
+		if err != nil {
+			// If the session could not be retrieved, it must have expired.
+			// This will suggest the user reloads their page, which will assign them a new session
+			return c.Redirect(http.StatusFound, c.Request().URL.String())
+		}
+
 		ticker := c.FormValue("ticker")
 		if ticker == "" {
 			utils.Log("66979902").Warn("Ticker not provided")
@@ -27,8 +35,6 @@ func GetShareDataRoute() echo.HandlerFunc {
 		if err != nil {
 			return c.String(http.StatusBadRequest, "")
 		}
-
-		data.GetSymbol()
 
 		return c.Render(http.StatusOK, "shareTableRow", data)
 		// return c.String(http.StatusOK, fmt.Sprintf("%+v", data))

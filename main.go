@@ -3,19 +3,22 @@ package main
 
 import (
 	"bytes"
-	"context"
-	"fmt"
 	"log/slog"
 	"os"
 	"os/exec"
-	"share-profile-allocator/internal/grpc"
 	"share-profile-allocator/internal/routes"
+	"share-profile-allocator/internal/session"
 	"share-profile-allocator/internal/utils"
 	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+)
+
+const (
+	webServerPort     = "8080"
+	sessionTimeoutLen = 1 * time.Hour
 )
 
 func initialiseLogger() {
@@ -65,29 +68,25 @@ func main() {
 		panic(err)
 	}
 
-	utils.Log("cbddd68d").Info("Starting Echo web server")
+	utils.Log("52dcca61").Info("Creating server session manager")
+	sessionManager := session.NewSessionManager(sessionTimeoutLen)
 
+	utils.Log("cbddd68d").Info("Configuring Echo web server")
 	e := echo.New()
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(sessionManager.Middleware()) // This will provide an ID cookie to all users
 
 	e.Renderer = utils.Template
 
 	// Expose public files from server
-	e.Static("/public/js", "js")
-	e.Static("/public/styles", "css")
+	e.Static("/public", "public")
 
 	// Setup routes
-	e.GET("/", routes.GetRootRoute())
-	e.POST("/sharedata", routes.GetShareDataRoute())
-	// e.GET("/contacts", routes.GetContactsRoute())
-	// e.POST("/contacts", routes.PostContactsRoute())
-	// e.POST("/delete", routes.PostDeleteReoute())
+	e.GET("/", routes.GetRootRoute(sessionManager))
+	e.POST("/sharedata", routes.GetShareDataRoute(sessionManager))
 
-	data, _ := grpc.RequestDataForTicker(context.Background(), "DHHF")
-	fmt.Printf("\n\n%+v\n\n", data)
-
-	e.Logger.Fatal(e.Start(":8080"))
-
+	utils.Log("08286955").Info("Starting Echo web server on port " + webServerPort)
+	e.Logger.Fatal(e.Start(":" + webServerPort))
 }
