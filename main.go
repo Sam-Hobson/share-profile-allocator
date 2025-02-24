@@ -62,15 +62,19 @@ func startFinanceServer() error {
 }
 
 func main() {
+	// Initialise the logger
 	initialiseLogger()
 
+	// Initialise the python finance server
 	if err := startFinanceServer(); err != nil {
 		panic(err)
 	}
 
+	// Initialise the session manager
 	utils.Log("52dcca61").Info("Creating server session manager")
 	sessionManager := session.NewSessionManager(sessionTimeoutLen)
 
+	// Initialise the web server
 	utils.Log("cbddd68d").Info("Configuring Echo web server")
 	e := echo.New()
 

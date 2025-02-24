@@ -9,13 +9,13 @@ import (
 
 func GetRootRoute(sessionManager *session.SessionManager) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		_, err := sessionManager.GetSession(c)
+		sessionData, err := sessionManager.GetSessionFromCtx(c)
 		if err != nil {
 			// If the session could not be retrieved, it must have expired.
 			// This will suggest the user reloads their page, which will assign them a new session
 			return c.Redirect(http.StatusFound, c.Request().URL.String())
 		}
 
-		return c.Render(http.StatusOK, "root", nil)
+		return c.Render(http.StatusOK, "root", sessionData)
 	}
 }

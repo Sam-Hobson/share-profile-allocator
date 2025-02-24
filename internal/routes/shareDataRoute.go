@@ -1,10 +1,9 @@
 package routes
 
 import (
-	"context"
 	"net/http"
-	"share-profile-allocator/internal/grpc"
 	"share-profile-allocator/internal/session"
+	"share-profile-allocator/internal/state"
 	"share-profile-allocator/internal/utils"
 	"time"
 
@@ -15,10 +14,11 @@ const RequestTickerDataTimeout = 2 * time.Second
 
 func GetShareDataRoute(sessionManager *session.SessionManager) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		_, err := sessionManager.GetSession(c)
+		sessionData, err := sessionManager.GetSessionFromCtx(c)
 		if err != nil {
 			// If the session could not be retrieved, it must have expired.
 			// This will suggest the user reloads their page, which will assign them a new session
+			utils.Log("4e000201").Info("Error retrieving session, requesting client to reload")
 			return c.Redirect(http.StatusFound, c.Request().URL.String())
 		}
 
@@ -28,13 +28,13 @@ func GetShareDataRoute(sessionManager *session.SessionManager) echo.HandlerFunc 
 			return c.String(http.StatusBadRequest, "")
 		}
 
-		ctx, cancel := context.WithTimeout(context.Background(), RequestTickerDataTimeout)
-		defer cancel()
-
-		data, err := grpc.RequestDataForTicker(ctx, ticker)
+		data, err := state.GetShareDataCache().GetShareData(ticker)
 		if err != nil {
+			utils.Log("87598df9").Error("Failed to get share data from cache", "err", err.Error())
 			return c.String(http.StatusBadRequest, "")
 		}
+
+		sessionData.TrackedShares.Append(ticker)
 
 		return c.Render(http.StatusOK, "shareTableRow", data)
 		// return c.String(http.StatusOK, fmt.Sprintf("%+v", data))

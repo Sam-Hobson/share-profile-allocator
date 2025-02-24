@@ -13,7 +13,7 @@ import (
 
 // SessionData represents the data stored in a session
 type SessionData struct {
-	Data         map[string]any
+	Data         *SessionState
 	LastAccessed time.Time
 	mu           sync.RWMutex
 }
@@ -23,8 +23,6 @@ type SessionManager struct {
 	sessions map[string]*SessionData
 	mu       sync.RWMutex
 	maxAge   time.Duration
-
-	cleanupSessions sync.Once
 }
 
 // NewSessionManager creates a new session manager
@@ -46,7 +44,7 @@ func (sm *SessionManager) StartNewSession() string {
 
 	sm.mu.Lock()
 	sm.sessions[id] = &SessionData{
-		Data:         make(map[string]any),
+		Data:         NewSessionState(),
 		LastAccessed: time.Now(),
 	}
 	sm.mu.Unlock()
@@ -55,9 +53,12 @@ func (sm *SessionManager) StartNewSession() string {
 	return id
 }
 
-func (sm *SessionManager) GetSession(c echo.Context) (map[string]any, error) {
+func (sm *SessionManager) GetSessionFromCtx(c echo.Context) (*SessionState, error) {
 	id := c.Get("session_id").(string)
+	return sm.GetSessionFromId(id)
+}
 
+func (sm *SessionManager) GetSessionFromId(id string) (*SessionState, error) {
 	sm.mu.RLock()
 	session, ok := sm.sessions[id]
 	sm.mu.RUnlock()
@@ -79,31 +80,28 @@ func (sm *SessionManager) GetSession(c echo.Context) (map[string]any, error) {
 
 // cleanupSessionJob removes expired sessions periodically
 func (sm *SessionManager) cleanupSessionJob() {
-	sm.cleanupSessions.Do(
-		func() {
-			cleanUpFreq := sm.maxAge / 2
-			utils.Log("b684c505").Info("Starting session clean up job", "Clean up every", cleanUpFreq)
+	cleanUpFreq := sm.maxAge / 2
+	utils.Log("b684c505").Info("Starting session clean up job", "Interval", cleanUpFreq)
 
-			go func() {
-				ticker := time.NewTicker(cleanUpFreq)
-				for range ticker.C {
-					sm.mu.Lock()
+	go func() {
+		ticker := time.NewTicker(cleanUpFreq)
+		for range ticker.C {
+			sm.mu.Lock()
 
-					for id, session := range sm.sessions {
-						if time.Since(session.LastAccessed) > sm.maxAge {
-							utils.Log("39c3e699").Info("Deleting expired session", "id", id, "LastAccessed", session.LastAccessed)
-							delete(sm.sessions, id)
-						}
-					}
-
-					sm.mu.Unlock()
+			for id, session := range sm.sessions {
+				if time.Since(session.LastAccessed) > sm.maxAge {
+					utils.Log("39c3e699").Info("Deleting expired session", "id", id, "LastAccessed", session.LastAccessed)
+					delete(sm.sessions, id)
 				}
-			}()
-		},
-	)
+			}
+
+			sm.mu.Unlock()
+		}
+	}()
 }
 
-// Middleware creates Echo middleware for session management
+// Middleware creates Echo middleware for session management. This will assign a session and
+// a corresponding cookie to every request
 func (sm *SessionManager) Middleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {

@@ -74,26 +74,9 @@
 						</tr>
 					</thead>
 					<tbody id="share-table-body">
-						<tr>
-							<th scope="row">1</th>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-							<td>Cell</td>
-						</tr>
+						{{ range .GetTrackedSharesAllData }}
+							{{ template "shareTableRow" . }}
+						{{ end }}
 					</tbody>
 				</table>
 			</div>

@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var zeroShareData WrappedShareData
+var ZeroShareData WrappedShareData
 
 type WrappedShareData struct {
 	*pb.ShareData
@@ -20,7 +20,7 @@ func NewWrappedShareData(data *pb.ShareData) *WrappedShareData {
 	return &WrappedShareData{ShareData: data}
 }
 
-func (sd *WrappedShareData) GetPrettySymbol() string {
+func (sd WrappedShareData) GetPrettySymbol() string {
 	symbol := sd.GetSymbol()
 	prettySymbol, found := strings.CutSuffix(symbol, ".AX")
 	if found {
@@ -30,10 +30,12 @@ func (sd *WrappedShareData) GetPrettySymbol() string {
 }
 
 func RequestDataForTicker(ctx context.Context, ticker string) (*WrappedShareData, error) {
+	utils.Log("76e5d6f4").Info("Retrieving data for ticker", "Ticker", ticker)
+
 	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		utils.Log("f9402212").Error("did not connect to finance data server", "Error", err.Error())
-		return &zeroShareData, err
+		return &ZeroShareData, err
 	}
 	defer conn.Close()
 
@@ -42,10 +44,8 @@ func RequestDataForTicker(ctx context.Context, ticker string) (*WrappedShareData
 	r, err := client.GetDataForTicker(ctx, &pb.Ticker{Name: ticker})
 	if err != nil {
 		utils.Log("e199af4d").Error("Could not retrieve data for ticker", "Ticker", ticker, "Error", err.Error())
-		return &zeroShareData, err
+		return &ZeroShareData, err
 	}
-
-	utils.Log("76e5d6f4").Info("Successfully retrieved data for ticker", "Ticker", ticker, "Data", r)
 
 	return NewWrappedShareData(r), nil
 }
