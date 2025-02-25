@@ -90,6 +90,7 @@ func main() {
 	// Setup routes
 	e.GET("/", routes.GetRootRoute(sessionManager))
 	e.POST("/sharedata", routes.GetShareDataRoute(sessionManager))
+	e.POST("/searchtickers", routes.GetSearchTickerRoute(sessionManager))
 
 	utils.Log("08286955").Info("Starting Echo web server on port " + webServerPort)
 	e.Logger.Fatal(e.Start(":" + webServerPort))

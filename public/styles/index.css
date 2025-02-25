@@ -10,7 +10,7 @@
 	border: 1px solid var(--pico-form-element-border-color);
 	color: var(--pico-form-element-color);
 	border-top: none;
-	max-height: 150px;
+	max-height: 300px;
 	overflow-y: auto;
 	display: none;
 }

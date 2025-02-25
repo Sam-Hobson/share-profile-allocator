@@ -49,12 +49,23 @@
 
 	<main class="container">
 
-		<form role="search" id="ticker-search-box-form" hx-post="/sharedata" hx-target="#share-table-body" hx-swap="afterbegin">
+		<!-- TODO: Add htmx indicators -->
+		<form role="search" id="ticker-search-box-form" hx-post="/sharedata" hx-target="#share-table-body"
+			hx-swap="afterbegin">
+
 			<div class="dropdown-container">
-				<input name="ticker"type="search" id="ticker-search-box" placeholder="VAS, VGS, DHHF..." autocomplete="off" />
-				<div id="ticker-search-dropdown-list" class="dropdown-list"></div>
+				<!-- Input field -->
+				<input name="ticker" type="search" id="ticker-search-box" placeholder="VAS, VGS, DHHF..."
+					autocomplete="off" hx-post="/searchtickers" hx-target="#ticker-search-dropdown-list"
+					hx-swap="innerHTML" hx-trigger="input changed delay:300ms" />
+
+				<!-- Dropdown auto complete -->
+				<div id="ticker-search-dropdown-list" class="dropdown-list" style="display: none;"></div>
+
 			</div>
-			<input type="submit" value="Search">
+
+			<!-- Submit button -->
+			<input type="submit" value="Search" />
 		</form>
 
 		<!-- Tables -->
@@ -75,7 +86,7 @@
 					</thead>
 					<tbody id="share-table-body">
 						{{ range .GetTrackedSharesAllData }}
-							{{ template "shareTableRow" . }}
+						{{ template "shareTableRow" . }}
 						{{ end }}
 					</tbody>
 				</table>
@@ -101,4 +112,11 @@
 	<td>Cell</td>
 	<td>Cell</td>
 </tr>
+{{ end }}
+
+{{ block "autoCompleteDropdown" . }}
+<!-- Dropdown auto complete -->
+{{ range $index, $item := . }}
+<div data-index="{{ $index }}"><span>{{ $item.Name }}</span> <sub>({{ $item.Description }})</sub></div>
+{{ end }}
 {{ end }}
