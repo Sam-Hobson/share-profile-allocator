@@ -51,7 +51,7 @@
 
 		<!-- TODO: Add htmx indicators -->
 		<form role="search" id="ticker-search-box-form" hx-post="/sharedata" hx-target="#share-table-body"
-			hx-swap="afterbegin">
+			hx-swap="beforeend">
 
 			<div class="dropdown-container">
 				<!-- Input field -->
@@ -85,8 +85,8 @@
 						</tr>
 					</thead>
 					<tbody id="share-table-body">
-						{{ range .GetTrackedSharesAllData }}
-						{{ template "shareTableRow" . }}
+						{{ range $i, $e := .GetTrackedRowsData }}
+						{{ template "shareTableRow" (dict "Index" (add1 $i) "Data" $e) }}
 						{{ end }}
 					</tbody>
 				</table>
@@ -103,14 +103,12 @@
 
 {{ block "shareTableRow" . }}
 <tr>
-	<th scope="row">1</th>
-	<td>{{ .GetPrettySymbol }}</td>
-	<td>{{ .GetAsk }}</td>
-	<td>{{ .GetTrailingPE }}</td>
-	<td>Cell</td>
-	<td>Cell</td>
-	<td>Cell</td>
-	<td>Cell</td>
+	<th scope="row">{{ .Index }}</th>
+	<td>{{ .Data.DisplaySymbol }}</td>
+	<td>{{ .Data.DisplayAsk }}</td>
+	<td>{{ .Data.DisplayPe }}</td>
+	<td>{{ .Data.DisplayMarketCap }}</td>
+	<td>{{ .Data.DisplayVolume }}</td>
 </tr>
 {{ end }}
 

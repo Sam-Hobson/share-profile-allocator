@@ -2,7 +2,6 @@ package state
 
 import (
 	"context"
-	"fmt"
 	"share-profile-allocator/internal/grpc"
 	"share-profile-allocator/internal/utils"
 	"sync"
@@ -11,7 +10,7 @@ import (
 
 const (
 	shareDataCacheTimeout    = 3 * time.Hour
-	requestTickerDataTimeout = 2 * time.Second
+	requestTickerDataTimeout = 20 * time.Second
 )
 
 var createCache sync.Once
@@ -55,7 +54,7 @@ func (cache *ShareDataCache) GetShareData(ticker string) (*grpc.WrappedShareData
 
 	shareData, err := grpc.RequestDataForTicker(ctx, ticker)
 	if err != nil {
-		fmt.Printf("\n\n%+v\n\n", err.Error())
+		utils.Log("3778cca3").Error("Unable to get share data, GRPC request failed")
 		return &grpc.ZeroShareData, err
 	}
 
@@ -69,31 +68,35 @@ func (cache *ShareDataCache) GetShareData(ticker string) (*grpc.WrappedShareData
 	return shareData, nil
 }
 
+type ShareDataResult struct {
+	Data *grpc.WrappedShareData
+	Err  error
+}
+
 // BatchGetShareData gets the data for the given tickers asynchronously. This is good for if you want to
 // get the data for a lot of tickers, so you don't want to wait for each request to complete
 // before requesting another.
-func (cache *ShareDataCache) BatchGetShareData(tickers ...string) <-chan *grpc.WrappedShareData {
-	ch := make(chan *grpc.WrappedShareData, len(tickers))
+func (cache *ShareDataCache) BatchGetShareData(tickers ...string) []ShareDataResult {
+	res := make([]ShareDataResult, len(tickers))
 	var wg sync.WaitGroup
 
-	go func() {
-		for _, ticker := range tickers {
-			wg.Add(1)
+	for i, t := range tickers {
+		wg.Add(1)
 
-			go func() {
-				defer wg.Done()
-				data, err := cache.GetShareData(ticker)
-				if err == nil {
-					ch <- data
-				}
-			}()
-		}
+		go func(index int, ticker string) {
+			data, err := cache.GetShareData(ticker)
+			res[index] = ShareDataResult{
+				Data: data,
+				Err:  err,
+			}
 
-		wg.Wait()
-		close(ch)
-	}()
+			wg.Done()
+		}(i, t)
+	}
 
-	return ch
+	wg.Wait()
+
+	return res
 }
 
 // cleanupCacheJob launches a goroutine to delete any cache entries that have expired

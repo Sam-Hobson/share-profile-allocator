@@ -16,14 +16,16 @@ func NewSessionState() *SessionState {
 	}
 }
 
-func (ss *SessionState) GetTrackedSharesAllData() []*grpc.WrappedShareData {
+func (ss *SessionState) GetTrackedRowsData() []*grpc.WrappedShareData {
 	res := []*grpc.WrappedShareData{}
 
 	tickers := ss.TrackedShares.Items()
-	ch := state.GetShareDataCache().BatchGetShareData(tickers...)
+	data := state.GetShareDataCache().BatchGetShareData(tickers...)
 
-	for shareData := range ch {
-		res=append(res, shareData)
+	for _, d := range data {
+		if d.Err == nil {
+			res = append(res, d.Data)
+		}
 	}
 
 	return res

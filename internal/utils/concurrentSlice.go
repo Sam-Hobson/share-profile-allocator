@@ -6,12 +6,12 @@ import (
 	"sync"
 )
 
-type ConcurrentSlice[T any] struct {
+type ConcurrentSlice[T comparable] struct {
 	sync.RWMutex
 	items []T
 }
 
-func NewConcurrentSlice[T any]() *ConcurrentSlice[T] {
+func NewConcurrentSlice[T comparable]() *ConcurrentSlice[T] {
 	return &ConcurrentSlice[T]{
 		items: []T{},
 	}
@@ -43,6 +43,10 @@ func (cs *ConcurrentSlice[T]) IndexFunc(f func(T) bool) int {
 	cs.RLock()
 	defer cs.RUnlock()
 	return slices.IndexFunc(cs.items, f)
+}
+
+func (cs *ConcurrentSlice[T]) Index(item T) int {
+	return cs.IndexFunc(func(t T) bool { return t == item })
 }
 
 func (cs *ConcurrentSlice[T]) Remove(index int) error {
@@ -79,7 +83,7 @@ func (cs *ConcurrentSlice[T]) Items() []T {
 }
 
 // Iterator type for the concurrent slice
-type Iterator[T any] struct {
+type Iterator[T comparable] struct {
 	slice    *ConcurrentSlice[T]
 	index    int
 	released bool

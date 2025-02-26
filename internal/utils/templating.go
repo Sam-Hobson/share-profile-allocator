@@ -8,8 +8,25 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// dict function to create a map in templates
+func dict(values ...any) map[string]any {
+	m := make(map[string]any)
+	for i := 0; i < len(values); i += 2 {
+		key, _ := values[i].(string)
+		if i+1 < len(values) {
+			m[key] = values[i+1]
+		}
+	}
+	return m
+}
+
+var funcMap = template.FuncMap{
+	"dict": dict,
+	"add1": func(i int) int { return i + 1 },
+}
+
 var Template = &templateRenderer{
-	templates: template.Must(template.ParseGlob("public/views/*.html")),
+	templates: template.Must(template.New("").Funcs(funcMap).ParseGlob("public/views/*.html")),
 }
 
 type templateRenderer struct {
@@ -27,4 +44,3 @@ func RenderTemplateToString(name string, data any) (string, error) {
 	}
 	return buf.String(), nil
 }
-

@@ -4,30 +4,10 @@ import (
 	"context"
 	pb "share-profile-allocator/internal/grpc/generated/go"
 	"share-profile-allocator/internal/utils"
-	"strings"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
-
-var ZeroShareData WrappedShareData
-
-type WrappedShareData struct {
-	*pb.ShareData
-}
-
-func NewWrappedShareData(data *pb.ShareData) *WrappedShareData {
-	return &WrappedShareData{ShareData: data}
-}
-
-func (sd WrappedShareData) GetPrettySymbol() string {
-	symbol := sd.GetSymbol()
-	prettySymbol, found := strings.CutSuffix(symbol, ".AX")
-	if found {
-		return prettySymbol
-	}
-	return symbol
-}
 
 func RequestDataForTicker(ctx context.Context, ticker string) (*WrappedShareData, error) {
 	utils.Log("76e5d6f4").Info("Retrieving data for ticker", "Ticker", ticker)

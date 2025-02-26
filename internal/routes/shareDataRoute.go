@@ -2,9 +2,11 @@ package routes
 
 import (
 	"net/http"
+	"share-profile-allocator/internal/grpc"
 	"share-profile-allocator/internal/session"
 	"share-profile-allocator/internal/state"
 	"share-profile-allocator/internal/utils"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -22,10 +24,15 @@ func GetShareDataRoute(sessionManager *session.SessionManager) echo.HandlerFunc 
 			return c.Redirect(http.StatusFound, c.Request().URL.String())
 		}
 
-		ticker := c.FormValue("ticker")
+		ticker := strings.ToUpper(c.FormValue("ticker"))
 		if ticker == "" {
 			utils.Log("66979902").Warn("Ticker not provided")
 			return c.String(http.StatusBadRequest, "")
+		}
+		// Check if the ticker is already being displayed to the user
+		if sessionData.TrackedShares.IndexFunc(func(s string) bool { return ticker == s }) != -1 {
+			utils.Log("ccb62758").Warn("Rejecting get share data, as ticker is already present in the session", "ticker", ticker, "sessionData", sessionData)
+			return c.String(http.StatusBadRequest, "Share profile already present")
 		}
 
 		data, err := state.GetShareDataCache().GetShareData(ticker)
@@ -36,7 +43,12 @@ func GetShareDataRoute(sessionManager *session.SessionManager) echo.HandlerFunc 
 
 		sessionData.TrackedShares.Append(ticker)
 
-		return c.Render(http.StatusOK, "shareTableRow", data)
-		// return c.String(http.StatusOK, fmt.Sprintf("%+v", data))
+		return c.Render(http.StatusOK, "shareTableRow", struct {
+			Index int
+			Data  *grpc.WrappedShareData
+		}{
+			Index: sessionData.TrackedShares.Len(),
+			Data:  data,
+		})
 	}
 }
