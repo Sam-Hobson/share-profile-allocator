@@ -4,24 +4,30 @@ import (
 	pb "share-profile-allocator/internal/grpc/generated/go"
 	"strconv"
 	"strings"
+
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 const (
 	nullStr = "null"
 )
 
-func genericDisplayDouble(f float64) string {
-	if f == 0.0 {
-		return nullStr
-	}
-	return strconv.FormatFloat(f, 'f', 3, 64)
+func displayDollar(s string) string {
+	return "$" + s
 }
 
-func genericDisplayInt64(f int64) string {
-	if f == 0 {
-		return nullStr
-	}
-	return strconv.FormatInt(f, 10)
+func displayPercentage(s string) string {
+	return s + "%"
+}
+
+func displayDouble(f float64) string {
+	return strconv.FormatFloat(f, 'f', 2, 64)
+}
+
+func displayInt64(f int64) string {
+	p := message.NewPrinter(language.English)
+    return p.Sprintf("%d\n", f)
 }
 
 var ZeroShareData WrappedShareData
@@ -46,17 +52,43 @@ func (sd *WrappedShareData) DisplaySymbol() string {
 }
 
 func (sd *WrappedShareData) DisplayAsk() string {
-	return genericDisplayDouble(sd.GetAsk())
+	if sd.GetAsk() == 0.0 {
+		return nullStr
+	}
+	return displayDollar(displayDouble(sd.GetAsk()))
 }
 
 func (sd *WrappedShareData) DisplayPe() string {
-	return genericDisplayDouble(sd.GetPe())
+	if sd.GetPe() == 0.0 {
+		return nullStr
+	}
+	return displayDouble(sd.GetPe())
 }
 
 func (sd *WrappedShareData) DisplayMarketCap() string {
-	return genericDisplayInt64(sd.GetMarketCap())
+	if sd.GetMarketCap() == 0 {
+		return nullStr
+	}
+	return displayDollar(displayInt64(sd.GetMarketCap()))
 }
 
 func (sd *WrappedShareData) DisplayVolume() string {
-	return genericDisplayInt64(sd.GetVolume())
+	if sd.GetVolume() == 0 {
+		return nullStr
+	}
+	return displayInt64(sd.GetVolume())
+}
+
+func (sd *WrappedShareData) DisplayNav() string {
+	if sd.GetNav() == 0.0 {
+		return nullStr
+	}
+	return displayDollar(displayDouble(sd.GetNav()))
+}
+
+func (sd *WrappedShareData) DisplayDividendYield() string {
+	if sd.GetDividendYield() == 0.0 {
+		return nullStr
+	}
+	return displayPercentage(displayDouble(sd.GetDividendYield()))
 }

@@ -2,7 +2,6 @@ package routes
 
 import (
 	"net/http"
-	"share-profile-allocator/internal/grpc"
 	"share-profile-allocator/internal/session"
 	"share-profile-allocator/internal/state"
 	"share-profile-allocator/internal/utils"
@@ -43,12 +42,6 @@ func GetShareDataRoute(sessionManager *session.SessionManager) echo.HandlerFunc 
 
 		sessionData.TrackedShares.Append(ticker)
 
-		return c.Render(http.StatusOK, "shareTableRow", struct {
-			Index int
-			Data  *grpc.WrappedShareData
-		}{
-			Index: sessionData.TrackedShares.Len(),
-			Data:  data,
-		})
+		return c.Render(http.StatusOK, "shareTableRow", data)
 	}
 }

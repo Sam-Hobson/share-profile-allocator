@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bshareProfileAllocator.proto\x12\x15shareprofileallocator\"\x16\n\x06Ticker\x12\x0c\n\x04name\x18\x01 \x01(\t\"e\n\tShareData\x12\x0b\n\x03\x61sk\x18\x01 \x01(\x01\x12\n\n\x02pe\x18\x02 \x01(\x01\x12\x0b\n\x03nav\x18\x03 \x01(\x01\x12\x12\n\nmarket_cap\x18\x04 \x01(\x03\x12\x0e\n\x06volume\x18\x06 \x01(\x03\x12\x0e\n\x06symbol\x18\x07 \x01(\t2a\n\x08ShareAPI\x12U\n\x10GetDataForTicker\x12\x1d.shareprofileallocator.Ticker\x1a .shareprofileallocator.ShareData\"\x00\x42\x1cZ\x1ainternal/grpc/generated/gob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bshareProfileAllocator.proto\x12\x15shareprofileallocator\"\x16\n\x06Ticker\x12\x0c\n\x04name\x18\x01 \x01(\t\"}\n\tShareData\x12\x0b\n\x03\x61sk\x18\x01 \x01(\x01\x12\n\n\x02pe\x18\x02 \x01(\x01\x12\x0b\n\x03nav\x18\x03 \x01(\x01\x12\x12\n\nmarket_cap\x18\x04 \x01(\x03\x12\x0e\n\x06volume\x18\x06 \x01(\x03\x12\x0e\n\x06symbol\x18\x07 \x01(\t\x12\x16\n\x0e\x64ividend_yield\x18\x08 \x01(\x01\x32\x61\n\x08ShareAPI\x12U\n\x10GetDataForTicker\x12\x1d.shareprofileallocator.Ticker\x1a .shareprofileallocator.ShareData\"\x00\x42\x1cZ\x1ainternal/grpc/generated/gob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,7 +35,7 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_TICKER']._serialized_start=54
   _globals['_TICKER']._serialized_end=76
   _globals['_SHAREDATA']._serialized_start=78
-  _globals['_SHAREDATA']._serialized_end=179
-  _globals['_SHAREAPI']._serialized_start=181
-  _globals['_SHAREAPI']._serialized_end=278
+  _globals['_SHAREDATA']._serialized_end=203
+  _globals['_SHAREAPI']._serialized_start=205
+  _globals['_SHAREAPI']._serialized_end=302
 # @@protoc_insertion_point(module_scope)

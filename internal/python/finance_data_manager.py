@@ -47,7 +47,8 @@ def share_data_obj(data):
             nav=getEntry(DOUBLE, data, "summary_detail", "navPrice"),
             market_cap=getEntry(INT64, data, "summary_detail", "totalAssets"),
             volume=getEntry(INT64, data, "summary_detail", "volume"),
-            symbol=getEntry(STRING, data, "summary_detail", "symbol")
+            symbol=getEntry(STRING, data, "summary_detail", "symbol"),
+            dividend_yield=getEntry(DOUBLE, data, "summary_detail", "dividendYield")
         )
     return obj
 

@@ -1,6 +1,5 @@
 const searchBox = document.getElementById("ticker-search-box");
 const dropdownList = document.getElementById("ticker-search-dropdown-list");
-
 document.addEventListener("htmx:afterSwap", function(event) {
 	if (event.detail.target.id === "ticker-search-dropdown-list") {
 		dropdownList.style.display = "block";
@@ -9,10 +8,15 @@ document.addEventListener("htmx:afterSwap", function(event) {
 
 let selectedIndex = -1; // Track selected index
 
+function closeDropdown() {
+	dropdownList.style.display = "none";
+	selectedIndex = -1;
+}
+
 function selectOption(value) {
 	const item = value.querySelector("span");
 	searchBox.value = item.textContent;
-	dropdownList.style.display = "none";
+	closeDropdown();
 }
 
 searchBox.addEventListener("keydown", (e) => {
@@ -37,7 +41,7 @@ searchBox.addEventListener("keydown", (e) => {
 			selectOption(items[selectedIndex])
 		};
 	} else if (e.key === "Tab") {
-		dropdownList.style.display = "none"; // Hide dropdown on Tab
+		closeDropdown();
 	}
 });
 
@@ -63,6 +67,6 @@ dropdownList.addEventListener("click", (e) => {
 
 document.addEventListener("click", (e) => {
 	if (!searchBox.contains(e.target) && !dropdownList.contains(e.target)) {
-		dropdownList.style.display = "none";
+		closeDropdown();
 	}
 });

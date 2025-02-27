@@ -28,3 +28,41 @@
 #ticker-search-box-form {
 	max-width: 600px;
 }
+
+.center-child {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+.htmx-indicator {
+	visibility: hidden;
+}
+
+.htmx-request .htmx-indicator {
+	visibility: visible;
+}
+
+.htmx-request.htmx-indicator {
+	visibility: visible;
+}
+
+.delete-row-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 5px;
+	display: inline-flex;
+	align-items: center;
+}
+
+.delete-row-button svg {
+	width: 40px;
+	height: 40px;
+	fill: var(--pico-form-element-invalid-border-color);
+	transition: fill 0.3s ease-in-out;
+}
+
+.delete-row-button svg:hover {
+	fill: var(--pico-form-element-invalid-active-border-color) !important;
+}

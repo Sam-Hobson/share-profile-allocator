@@ -19,5 +19,6 @@ message ShareData {
 	int64 market_cap = 4;
 	int64 volume = 6;
 	string symbol = 7;
+	double dividend_yield = 8;
 }
 

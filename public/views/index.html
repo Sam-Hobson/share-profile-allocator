@@ -9,6 +9,7 @@
 	<meta name="color-scheme" content="light dark">
 
 	<!-- Pico css -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
 
 	<!-- htmx -->
@@ -19,18 +20,19 @@
 	<link rel="stylesheet" href="/public/styles/index.css" />
 	<script src="/public/js/theme_switcher.js" defer></script>
 	<script src="/public/js/search_box_dropdown.js" defer></script>
+	<script src="/public/js/share_table.js" defer></script>
 
 	<title>Hello world!</title>
 </head>
 
 <body>
+
 	<!-- Header -->
 	<header class="container">
-		<hgroup>
-			<h1>Pico</h1>
-			<p>A pure HTML example, without dependencies.</p>
-		</hgroup>
 		<nav>
+			<ul>
+				<li><strong>Share data tracker</strong></li>
+			</ul>
 			<ul>
 				<li>
 					<details class="dropdown">
@@ -42,6 +44,9 @@
 						</ul>
 					</details>
 				</li>
+				<!-- <li><a href="#">About</a></li> -->
+				<!-- <li><a href="#">Services</a></li> -->
+				<!-- <li><a href="#">Products</a></li> -->
 			</ul>
 		</nav>
 	</header>
@@ -50,23 +55,26 @@
 	<main class="container">
 
 		<!-- TODO: Add htmx indicators -->
-		<form role="search" id="ticker-search-box-form" hx-post="/sharedata" hx-target="#share-table-body"
-			hx-swap="beforeend">
+		<div class="center-child">
+			<form role="search" id="ticker-search-box-form" hx-post="/sharedata" hx-target="#share-table-body"
+				hx-swap="beforeend" hx-indicator="#search-progress">
 
-			<div class="dropdown-container">
-				<!-- Input field -->
-				<input name="ticker" type="search" id="ticker-search-box" placeholder="VAS, VGS, DHHF..."
-					autocomplete="off" hx-post="/searchtickers" hx-target="#ticker-search-dropdown-list"
-					hx-swap="innerHTML" hx-trigger="input changed delay:300ms" />
+				<div class="dropdown-container">
+					<!-- Input field -->
+					<input name="ticker" type="search" id="ticker-search-box" placeholder="VAS, VGS, DHHF..."
+						autocomplete="off" hx-post="/searchtickers" hx-target="#ticker-search-dropdown-list"
+						hx-swap="innerHTML" hx-trigger="input changed delay:300ms" hx-indicator="null" />
 
-				<!-- Dropdown auto complete -->
-				<div id="ticker-search-dropdown-list" class="dropdown-list" style="display: none;"></div>
+					<!-- Dropdown auto complete -->
+					<div id="ticker-search-dropdown-list" class="dropdown-list" style="display: none;"></div>
+				</div>
 
-			</div>
+				<!-- Submit button -->
+				<input type="submit" value="Search" />
+			</form>
+		</div>
 
-			<!-- Submit button -->
-			<input type="submit" value="Search" />
-		</form>
+		<progress id="search-progress" class="htmx-indicator"></progress>
 
 		<!-- Tables -->
 		<section id="tables">
@@ -75,20 +83,18 @@
 					<thead id="share-table-head">
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Heading1</th>
-							<th scope="col">Heading2</th>
-							<th scope="col">Heading3</th>
-							<th scope="col">Heading4</th>
-							<th scope="col">Heading5</th>
-							<th scope="col">Heading6</th>
-							<th scope="col">Heading7</th>
+							<th scope="col">Stock</th>
+							<th scope="col">Allocation</th>
+							<th scope="col">Ask price</th>
+							<th scope="col">p/e ratio</th>
+							<th scope="col">Net asset value</th>
+							<th scope="col">Market cap</th>
+							<th scope="col">Volume</th>
+							<th scope="col">Dividend yield</th>
+							<th scope="col"></th>
 						</tr>
 					</thead>
-					<tbody id="share-table-body">
-						{{ range $i, $e := .GetTrackedRowsData }}
-						{{ template "shareTableRow" (dict "Index" (add1 $i) "Data" $e) }}
-						{{ end }}
-					</tbody>
+					{{ template "shareTable" .GetTrackedRowsData }}
 				</table>
 			</div>
 		</section>
@@ -101,15 +107,39 @@
 
 {{ end }}
 
+{{ block "shareTable" . }}
+<tbody id="share-table-body">
+	{{ range . }}
+	{{ template "shareTableRow" . }}
+	{{ end }}
+</tbody>
+{{ end }}
+
 {{ block "shareTableRow" . }}
-<tr>
-	<th scope="row">{{ .Index }}</th>
-	<td>{{ .Data.DisplaySymbol }}</td>
-	<td>{{ .Data.DisplayAsk }}</td>
-	<td>{{ .Data.DisplayPe }}</td>
-	<td>{{ .Data.DisplayMarketCap }}</td>
-	<td>{{ .Data.DisplayVolume }}</td>
+<tr id="table-row-{{ .DisplaySymbol }}">
+	<th scope="row"></th>
+	<td>{{ .DisplaySymbol }}</td>
+	<td><input type="text" name="input" min="0" max="100" aria-invalid="true"
+			style="margin: 0; width: 120px; text-align: center;" /></td>
+	<td>{{ .DisplayAsk }}</td>
+	<td>{{ .DisplayPe }}</td>
+	<td>{{ .DisplayNav }}</td>
+	<td>{{ .DisplayMarketCap }}</td>
+	<td>{{ .DisplayVolume }}</td>
+	<td>{{ .DisplayDividendYield }}</td>
+	<td>
+		<button class="delete-row-button" aria-label="delete" hx-post="/deleteshare"
+			hx-vals='{"ticker": "{{ .DisplaySymbol }}"}'>
+			<svg class="row-trash-icon" viewBox="0 0 24 24">
+				<path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm5-5h4v2h-4V4zm-4 5v11h10V9H6z" />
+			</svg>
+		</button>
+	</td>
 </tr>
+{{ end }}
+
+{{ block "deleteShareTableRow" . }}
+<tr id="table-row-{{ . }}" hx-swap-oob="delete"></tr>
 {{ end }}
 
 {{ block "autoCompleteDropdown" . }}

@@ -31,7 +31,7 @@ func GetSearchTickerRoute(sessionManager *session.SessionManager) echo.HandlerFu
 
 		for ticker, desc := range tickers {
 			// Use tickers name as search metric, but change to using description if input is long enough
-			if strings.HasPrefix(ticker, input) || (len(input) > 4 && strings.Contains(strings.ToUpper(desc), input)) {
+			if strings.HasPrefix(ticker, input) || (len(input) > 3 && strings.Contains(strings.ToUpper(desc), input)) {
 				res = append(res, struct {
 					Name        string
 					Description string
