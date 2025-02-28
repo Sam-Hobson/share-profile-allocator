@@ -91,6 +91,7 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(sessionManager.Middleware()) // This will provide an ID cookie to all users
+	e.Use(utils.HtmxCacheMiddleware(5))
 
 	e.Renderer = utils.Template
 
@@ -99,6 +100,7 @@ func main() {
 
 	// Setup routes
 	e.GET("/", routes.GetRootRoute(sessionManager))
+	e.GET("/sharesummary", routes.GetShareSummaryRoute(sessionManager))
 	e.POST("/sharedata", routes.GetShareDataRoute(sessionManager))
 	e.POST("/deleteshare", routes.GetDeleteShareRoute(sessionManager))
 	e.POST("/searchtickers", routes.GetSearchTickerRoute(sessionManager))

@@ -66,3 +66,7 @@
 .delete-row-button svg:hover {
 	fill: var(--pico-form-element-invalid-active-border-color) !important;
 }
+
+.summary-popup>article {
+	max-width: 1000px;
+}

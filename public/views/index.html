@@ -9,20 +9,21 @@
 	<meta name="color-scheme" content="light dark">
 
 	<!-- Pico css -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
 
 	<!-- htmx -->
 	<script src="https://unpkg.com/htmx.org@2.0.4"
 		integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
 		crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/htmx.org/dist/ext/preload.js"></script>
 
+	<!-- Local imports -->
 	<link rel="stylesheet" href="/public/styles/index.css" />
 	<script src="/public/js/theme_switcher.js" defer></script>
 	<script src="/public/js/search_box_dropdown.js" defer></script>
 	<script src="/public/js/share_table.js" defer></script>
 
-	<title>Hello world!</title>
+	<title>Share data tracker</title>
 </head>
 
 <body>
@@ -99,16 +100,28 @@
 			</div>
 		</section>
 		<!-- ./ Tables -->
+
+		<div id="popup_dialog"></div>
+
 	</main>
 
 </body>
+
+<script>
+	function deleteElement(elementId) {
+		const element = document.getElementById(elementId);
+		if (element) {
+			element.remove();
+		}
+	}
+</script>
 
 </html>
 
 {{ end }}
 
 {{ block "shareTable" . }}
-<tbody id="share-table-body">
+<tbody id="share-table-body" hx-ext="preload">
 	{{ range . }}
 	{{ template "shareTableRow" . }}
 	{{ end }}
@@ -118,7 +131,8 @@
 {{ block "shareTableRow" . }}
 <tr id="table-row-{{ .DisplaySymbol }}">
 	<th scope="row"></th>
-	<td>{{ .DisplaySymbol }}</td>
+	<td><a href="#" hx-get="/sharesummary" hx-vals='{"ticker": "{{ .DisplaySymbol }}"}' hx-target="#popup_dialog"
+			preload="mouseover" hx-on:click="event.preventDefault()">{{ .DisplaySymbol }}</a></td>
 	<td><input type="text" name="input" min="0" max="100" aria-invalid="true"
 			style="margin: 0; width: 120px; text-align: center;" /></td>
 	<td>{{ .DisplayAsk }}</td>
@@ -147,4 +161,23 @@
 {{ range $index, $item := . }}
 <div data-index="{{ $index }}"><span>{{ $item.Name }}</span> <sub>({{ $item.Description }})</sub></div>
 {{ end }}
+{{ end }}
+
+{{ block "shareSummaryPopup" . }}
+<dialog id="share-summary-popup-{{ . }}" class="summary-popup" open>
+	<article>
+		<h2>{{ . }}</h2>
+		<p>
+			Thank you for signing up for a membership!
+			Please review the membership details below:
+		</p>
+		<ul>
+			<li>Membership: Individual</li>
+			<li>Price: $10</li>
+		</ul>
+		<footer>
+			<button onclick="deleteElement('share-summary-popup-{{ . }}')">Confirm</button>
+		</footer>
+	</article>
+</dialog>
 {{ end }}
