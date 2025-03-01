@@ -20,5 +20,21 @@ message ShareData {
 	int64 volume = 6;
 	string symbol = 7;
 	double dividend_yield = 8;
+	string long_name = 9;
+	string long_business_summary = 10;
+	string address1 = 11;
+	string address2 = 12;
+	string city = 13;
+	string state = 14;
+	string zip = 15;
+	string country = 16;
+	string phone_number = 17;
+	string website = 18;
+	string industry = 19;
+	string sector = 20;
+	string exchange_name = 21;
+	string region = 22;
+	int64 num_full_time_employees = 23;
+	repeated string company_officers = 24;
 }
 

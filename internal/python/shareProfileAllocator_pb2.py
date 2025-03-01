@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bshareProfileAllocator.proto\x12\x15shareprofileallocator\"\x16\n\x06Ticker\x12\x0c\n\x04name\x18\x01 \x01(\t\"}\n\tShareData\x12\x0b\n\x03\x61sk\x18\x01 \x01(\x01\x12\n\n\x02pe\x18\x02 \x01(\x01\x12\x0b\n\x03nav\x18\x03 \x01(\x01\x12\x12\n\nmarket_cap\x18\x04 \x01(\x03\x12\x0e\n\x06volume\x18\x06 \x01(\x03\x12\x0e\n\x06symbol\x18\x07 \x01(\t\x12\x16\n\x0e\x64ividend_yield\x18\x08 \x01(\x01\x32\x61\n\x08ShareAPI\x12U\n\x10GetDataForTicker\x12\x1d.shareprofileallocator.Ticker\x1a .shareprofileallocator.ShareData\"\x00\x42\x1cZ\x1ainternal/grpc/generated/gob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bshareProfileAllocator.proto\x12\x15shareprofileallocator\"\x16\n\x06Ticker\x12\x0c\n\x04name\x18\x01 \x01(\t\"\xb9\x03\n\tShareData\x12\x0b\n\x03\x61sk\x18\x01 \x01(\x01\x12\n\n\x02pe\x18\x02 \x01(\x01\x12\x0b\n\x03nav\x18\x03 \x01(\x01\x12\x12\n\nmarket_cap\x18\x04 \x01(\x03\x12\x0e\n\x06volume\x18\x06 \x01(\x03\x12\x0e\n\x06symbol\x18\x07 \x01(\t\x12\x16\n\x0e\x64ividend_yield\x18\x08 \x01(\x01\x12\x11\n\tlong_name\x18\t \x01(\t\x12\x1d\n\x15long_business_summary\x18\n \x01(\t\x12\x10\n\x08\x61\x64\x64ress1\x18\x0b \x01(\t\x12\x10\n\x08\x61\x64\x64ress2\x18\x0c \x01(\t\x12\x0c\n\x04\x63ity\x18\r \x01(\t\x12\r\n\x05state\x18\x0e \x01(\t\x12\x0b\n\x03zip\x18\x0f \x01(\t\x12\x0f\n\x07\x63ountry\x18\x10 \x01(\t\x12\x14\n\x0cphone_number\x18\x11 \x01(\t\x12\x0f\n\x07website\x18\x12 \x01(\t\x12\x10\n\x08industry\x18\x13 \x01(\t\x12\x0e\n\x06sector\x18\x14 \x01(\t\x12\x15\n\rexchange_name\x18\x15 \x01(\t\x12\x0e\n\x06region\x18\x16 \x01(\t\x12\x1f\n\x17num_full_time_employees\x18\x17 \x01(\x03\x12\x18\n\x10\x63ompany_officers\x18\x18 \x03(\t2a\n\x08ShareAPI\x12U\n\x10GetDataForTicker\x12\x1d.shareprofileallocator.Ticker\x1a .shareprofileallocator.ShareData\"\x00\x42\x1cZ\x1ainternal/grpc/generated/gob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,8 +34,8 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._serialized_options = b'Z\032internal/grpc/generated/go'
   _globals['_TICKER']._serialized_start=54
   _globals['_TICKER']._serialized_end=76
-  _globals['_SHAREDATA']._serialized_start=78
-  _globals['_SHAREDATA']._serialized_end=203
-  _globals['_SHAREAPI']._serialized_start=205
-  _globals['_SHAREAPI']._serialized_end=302
+  _globals['_SHAREDATA']._serialized_start=79
+  _globals['_SHAREDATA']._serialized_end=520
+  _globals['_SHAREAPI']._serialized_start=522
+  _globals['_SHAREAPI']._serialized_end=619
 # @@protoc_insertion_point(module_scope)

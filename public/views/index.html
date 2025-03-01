@@ -131,8 +131,9 @@
 {{ block "shareTableRow" . }}
 <tr id="table-row-{{ .DisplaySymbol }}">
 	<th scope="row"></th>
-	<td><a href="#" hx-get="/sharesummary" hx-vals='{"ticker": "{{ .DisplaySymbol }}"}' hx-target="#popup_dialog"
-			preload="mouseover" hx-on:click="event.preventDefault()">{{ .DisplaySymbol }}</a></td>
+	<td><a href="#" data-tooltip="More info" hx-get="/sharesummary" hx-vals='{"ticker": "{{ .DisplaySymbol }}"}'
+			hx-target="#popup_dialog" preload="mouseover" hx-on:click="event.preventDefault()">{{ .DisplaySymbol }}</a>
+	</td>
 	<td><input type="text" name="input" min="0" max="100" aria-invalid="true"
 			style="margin: 0; width: 120px; text-align: center;" /></td>
 	<td>{{ .DisplayAsk }}</td>
@@ -142,7 +143,7 @@
 	<td>{{ .DisplayVolume }}</td>
 	<td>{{ .DisplayDividendYield }}</td>
 	<td>
-		<button class="delete-row-button" aria-label="delete" hx-post="/deleteshare"
+		<button class="delete-row-button" data-tooltip="Delete row" aria-label="delete" hx-post="/deleteshare"
 			hx-vals='{"ticker": "{{ .DisplaySymbol }}"}'>
 			<svg class="row-trash-icon" viewBox="0 0 24 24">
 				<path d="M3 6h18v2H3V6zm2 3h14v13H5V9zm5-5h4v2h-4V4zm-4 5v11h10V9H6z" />
@@ -164,20 +165,135 @@
 {{ end }}
 
 {{ block "shareSummaryPopup" . }}
-<dialog id="share-summary-popup-{{ . }}" class="summary-popup" open>
+<dialog id="share-summary-popup-{{ .Ticker }}" class="summary-popup" open>
 	<article>
-		<h2>{{ . }}</h2>
+		<!-- Render the title -->
+		<h2 class="primary">
+			{{ if .HasLongName }}
+			{{ .LongName }}
+			{{ else }}
+			{{ .Ticker }}
+			{{ end }}
+		</h2>
+
+		<!-- Add the website URL -->
+		{{ if .HasWebsite }}
 		<p>
-			Thank you for signing up for a membership!
-			Please review the membership details below:
+			<a href="{{ .WebsiteUrl }}" data-tooltip="Open in new tab" target="_blank">{{ .PrettyWebsiteUrl }}</a>
 		</p>
-		<ul>
-			<li>Membership: Individual</li>
-			<li>Price: $10</li>
-		</ul>
+		{{ end }}
+
+		{{ if .HasAboutInfo }}
+		<details open>
+			<summary role="button" class="outline">
+				<span>About</span>
+			</summary>
+			{{ if .HasLongBusinessSummary }}
+			<h4>Summary</h4>
+			<p>{{ .LongBusinessSummary }}</p>
+			{{ end }}
+
+			{{ if .HasContactInfo }}
+			<h4>Contact Info</h4>
+			<table>
+				<tbody>
+					{{ range .ContactInfo }}
+					<tr>
+						<th scope="row">{{ .Key }}</th>
+						<td>{{ .Value }}</td>
+					</tr>
+					{{ end }}
+				</tbody>
+			</table>
+			{{ end }}
+
+			{{ if .HasIndustryInfo }}
+			<h4>Industry Info</h4>
+			<table>
+				<tbody>
+					{{ range .IndustryInfo }}
+					<tr>
+						<th scope="row">{{ .Key }}</th>
+						<td>{{ .Value }}</td>
+					</tr>
+					{{ end }}
+				</tbody>
+			</table>
+			{{ end }}
+
+		</details>
+		{{ end }}
+
+		{{ if .HasPersonnelInfo }}
+		<details>
+			<summary role="button" class="outline">
+				<span>Personnel</span>
+			</summary>
+
+			{{ if .HasGeneralPersonnelInfo }}
+			<h4>General Info</h4>
+			<table>
+				<tbody>
+					{{ range .GeneralPersonnelInfo }}
+					<tr>
+						<th scope="row">{{ .Key }}</th>
+						<td>{{ .Value }}</td>
+					</tr>
+					{{ end }}
+				</tbody>
+			</table>
+			{{ end }}
+
+			{{ if .HasCompanyOfficers }}
+			<h4>Company Officers</h4>
+			{{ range .CompanyOfficers }}
+			{{ if .HasName }}
+			<h6><em>{{ .Name }}</em></h6>
+			<table>
+				<tbody>
+					{{ if .HasTitle }}
+					<tr>
+						<th scope="row">Title</th>
+						<td>{{ .Title }}</td>
+					</tr>
+					{{ end }}
+					{{ if .HasAge }}
+					<tr>
+						<th scope="row">Age</th>
+						<td>{{ .Age }}</td>
+					</tr>
+					{{ end }}
+					{{ if .HasTotalPay }}
+					<tr>
+						<th scope="row">Total pay</th>
+						<td>{{ .DisplayTotalPay }}</td>
+					</tr>
+					{{ end }}
+					{{ if .HasExercisedValue }}
+					<tr>
+						<th scope="row">Exercised value</th>
+						<td>{{ .ExercisedValue }}</td>
+					</tr>
+					{{ end }}
+					{{ if .HasUnexercisedValue }}
+					<tr>
+						<th scope="row">Unexercised value</th>
+						<td>{{ .UnexercisedValue }}</td>
+					</tr>
+					{{ end }}
+				</tbody>
+			</table>
+			{{ end }}
+			{{ end }}
+			{{ end }}
+
+		</details>
+		{{ end }}
+
 		<footer>
-			<button onclick="deleteElement('share-summary-popup-{{ . }}')">Confirm</button>
+			<button onclick="deleteElement('share-summary-popup-{{ .Ticker }}')">Close</button>
 		</footer>
+
 	</article>
 </dialog>
 {{ end }}
