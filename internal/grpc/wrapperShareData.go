@@ -51,7 +51,7 @@ func displayDouble(f float64) string {
 
 func displayInt64(f int64) string {
 	p := message.NewPrinter(language.English)
-	return p.Sprintf("%d\n", f)
+	return p.Sprintf("%d", f)
 }
 
 var ZeroShareData WrappedShareData
@@ -124,6 +124,66 @@ func (sd *WrappedShareData) DisplayWebsite() string {
 
 func (sd *WrappedShareData) DisplayNumberOfEmployees() string {
 	return displayInt64(sd.GetNumFullTimeEmployees())
+}
+
+func (sd *WrappedShareData) DisplayTotalRevenue() string {
+	return displayDollar(displayInt64(sd.GetTotalRevenue()))
+}
+
+func (sd *WrappedShareData) DisplayRevenueGrowth() string {
+	return displayPercentage(displayDouble(sd.GetRevenueGrowth()))
+}
+
+func (sd *WrappedShareData) DisplayRevenuePerShare() string {
+	return displayDollar(displayDouble(sd.GetRevenuePerShare()))
+}
+
+func (sd *WrappedShareData) DisplayProfitMargin() string {
+	return displayPercentage(displayDouble(sd.GetProfitMargins()))
+}
+
+func (sd *WrappedShareData) DisplayOperatingMargin() string {
+	return displayPercentage(displayDouble(sd.GetOperatingMargin()))
+}
+
+func (sd *WrappedShareData) DisplayGrossMargin() string {
+	return displayPercentage(displayDouble(sd.GetGrossMargin()))
+}
+
+func (sd *WrappedShareData) DisplayEbitdaMargin() string {
+	return displayPercentage(displayDouble(sd.GetEbitdaMargin()))
+}
+
+func (sd *WrappedShareData) DisplayGrossProfit() string {
+	return displayDollar(displayInt64(sd.GetGrossProfits()))
+}
+
+func (sd *WrappedShareData) DisplayTotalDebt() string {
+	return displayDollar(displayInt64(sd.GetTotalDebt()))
+}
+
+func (sd *WrappedShareData) DisplayDebtToEquity() string {
+	return displayPercentage(displayDouble(sd.GetDebtToEquity()))
+}
+
+func (sd *WrappedShareData) DisplayEarningsGrowth() string {
+	return displayPercentage(displayDouble(sd.GetEarningsGrowth()))
+}
+
+func (sd *WrappedShareData) DisplayOperatingCashFlow() string {
+	return displayDollar(displayInt64(sd.GetOperatingCashFlow()))
+}
+
+func (sd *WrappedShareData) DisplayFreeCashFlow() string {
+	return displayDollar(displayInt64(sd.GetFreeCashFlow()))
+}
+
+func (sd *WrappedShareData) DisplayEbitda() string {
+	return displayDollar(displayInt64(sd.GetEbitda()))
+}
+
+func (sd *WrappedShareData) DisplayTotalCash() string {
+	return displayDollar(displayInt64(sd.GetTotalCash()))
 }
 
 type CompanyOfficerData struct {

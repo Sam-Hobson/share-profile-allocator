@@ -70,3 +70,7 @@
 .summary-popup>article {
 	max-width: 1000px;
 }
+
+.fixed-table-layout {
+	table-layout: fixed;
+}

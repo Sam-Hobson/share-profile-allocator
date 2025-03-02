@@ -69,7 +69,22 @@ def share_data_obj(data):
             exchange_name=getEntry(STRING, data, "summary_detail", "fullExchangeName"),
             region=getEntry(STRING, data, "summary_detail", "region"),
             num_full_time_employees=getEntry(INT64, data, "summary_detail", "fullTimeEmployees"),
-            company_officers=company_officers
+            company_officers=company_officers,
+            total_revenue=getEntry(INT64, data, "summary_detail", "totalRevenue"),
+            revenue_growth=getEntry(DOUBLE, data, "summary_detail", "revenueGrowth"),
+            revenue_per_share=getEntry(DOUBLE, data, "summary_detail", "revenuePerShare"),
+            gross_profits=getEntry(INT64, data, "summary_detail", "grossProfits"),
+            profit_margins=getEntry(DOUBLE, data, "summary_detail", "profitMargins"),
+            total_debt=getEntry(INT64, data, "summary_detail", "totalDebt"),
+            debt_to_equity=getEntry(DOUBLE, data, "summary_detail", "debtToEquity"),
+            operating_margin=getEntry(DOUBLE, data, "summary_detail", "operatingMargins"),
+            gross_margin=getEntry(DOUBLE, data, "summary_detail", "grossMargins"),
+            ebitda_margin=getEntry(DOUBLE, data, "summary_detail", "ebitdaMargins"),
+            earnings_growth=getEntry(DOUBLE, data, "summary_detail", "earningsGrowth"),
+            operating_cash_flow=getEntry(INT64, data, "summary_detail", "operatingCashflow"),
+            free_cash_flow=getEntry(INT64, data, "summary_detail", "freeCashflow"),
+            ebitda=getEntry(INT64, data, "summary_detail", "ebitda"),
+            total_cash=getEntry(INT64, data, "summary_detail", "totalCash"),
         )
     return obj
 

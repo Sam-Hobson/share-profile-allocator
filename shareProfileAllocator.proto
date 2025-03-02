@@ -36,5 +36,20 @@ message ShareData {
 	string region = 22;
 	int64 num_full_time_employees = 23;
 	repeated string company_officers = 24;
+	int64 total_revenue = 25;
+	double revenue_growth = 26;
+	double revenue_per_share = 27;
+	int64 gross_profits = 28;
+	double profit_margins = 29;
+	int64 total_debt = 30;
+	double debt_to_equity = 31;
+	double operating_margin = 32;
+	double gross_margin = 33;
+	double ebitda_margin = 34;
+	double earnings_growth = 35;
+	int64 operating_cash_flow = 36;
+	int64 free_cash_flow = 37;
+	int64 ebitda = 38;
+	int64 total_cash = 39;
 }
 

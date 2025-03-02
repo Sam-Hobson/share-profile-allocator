@@ -22,6 +22,7 @@
 	<script src="/public/js/theme_switcher.js" defer></script>
 	<script src="/public/js/search_box_dropdown.js" defer></script>
 	<script src="/public/js/share_table.js" defer></script>
+	<script src="/public/js/modal.js" defer></script>
 
 	<title>Share data tracker</title>
 </head>
@@ -45,9 +46,6 @@
 						</ul>
 					</details>
 				</li>
-				<!-- <li><a href="#">About</a></li> -->
-				<!-- <li><a href="#">Services</a></li> -->
-				<!-- <li><a href="#">Products</a></li> -->
 			</ul>
 		</nav>
 	</header>
@@ -64,7 +62,7 @@
 					<!-- Input field -->
 					<input name="ticker" type="search" id="ticker-search-box" placeholder="VAS, VGS, DHHF..."
 						autocomplete="off" hx-post="/searchtickers" hx-target="#ticker-search-dropdown-list"
-						hx-swap="innerHTML" hx-trigger="input changed delay:300ms" hx-indicator="null" />
+						hx-swap="innerHTML" hx-trigger="input changed delay:300ms" hx-indicator="" />
 
 					<!-- Dropdown auto complete -->
 					<div id="ticker-search-dropdown-list" class="dropdown-list" style="display: none;"></div>
@@ -183,7 +181,7 @@
 		</p>
 		{{ end }}
 
-		{{ if .HasAboutInfo }}
+		{{ if .HasAboutSection }}
 		<details open>
 			<summary role="button" class="outline">
 				<span>About</span>
@@ -195,7 +193,11 @@
 
 			{{ if .HasContactInfo }}
 			<h4>Contact Info</h4>
-			<table>
+			<table class="fixed-table-layout">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
 				<tbody>
 					{{ range .ContactInfo }}
 					<tr>
@@ -209,7 +211,11 @@
 
 			{{ if .HasIndustryInfo }}
 			<h4>Industry Info</h4>
-			<table>
+			<table class="fixed-table-layout">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
 				<tbody>
 					{{ range .IndustryInfo }}
 					<tr>
@@ -224,7 +230,7 @@
 		</details>
 		{{ end }}
 
-		{{ if .HasPersonnelInfo }}
+		{{ if .HasPersonnelSection }}
 		<details>
 			<summary role="button" class="outline">
 				<span>Personnel</span>
@@ -232,7 +238,11 @@
 
 			{{ if .HasGeneralPersonnelInfo }}
 			<h4>General Info</h4>
-			<table>
+			<table class="fixed-table-layout">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
 				<tbody>
 					{{ range .GeneralPersonnelInfo }}
 					<tr>
@@ -249,7 +259,11 @@
 			{{ range .CompanyOfficers }}
 			{{ if .HasName }}
 			<h6><em>{{ .Name }}</em></h6>
-			<table>
+			<table class="fixed-table-layout">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
 				<tbody>
 					{{ if .HasTitle }}
 					<tr>
@@ -285,6 +299,83 @@
 			</table>
 			{{ end }}
 			{{ end }}
+			{{ end }}
+
+		</details>
+		{{ end }}
+
+		{{ if .HasFinanceSection }}
+		<details>
+			<summary role="button" class="outline">
+				<span>Finances</span>
+			</summary>
+
+			{{ if .HasFinanceOverviewData }}
+			<h4>Overview</h4>
+			<table class="fixed-table-layout">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
+
+				{{ range .FinanceOverviewData }}
+				<tr>
+					<th scope="row">{{ .Key }}</th>
+					<td>{{ .Value }}</td>
+				</tr>
+				{{ end }}
+			</table>
+			{{ end }}
+
+			{{ if .HasIncomeData }}
+			<h4>Income</h4>
+			<table class="fixed-table-layout">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
+
+				{{ range .IncomeData }}
+				<tr>
+					<th scope="row">{{ .Key }}</th>
+					<td>{{ .Value }}</td>
+				</tr>
+				{{ end }}
+			</table>
+			{{ end }}
+
+			{{ if .HasMarginData }}
+			<h4>Margins</h4>
+			<table class="fixed-table-layout">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
+
+				{{ range .MarginData }}
+				<tr>
+					<th scope="row">{{ .Key }}</th>
+					<td>{{ .Value }}</td>
+				</tr>
+				{{ end }}
+			</table>
+			{{ end }}
+
+			{{ if .HasDebtData }}
+			<h4>Debt</h4>
+			<table class="fixed-table-layout">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
+
+				{{ range .DebtData }}
+				<tr>
+					<th scope="row">{{ .Key }}</th>
+					<td>{{ .Value }}</td>
+				</tr>
+				{{ end }}
+			</table>
 			{{ end }}
 
 		</details>
