@@ -37,5 +37,9 @@ run-share-server:
 	{{ python }} ./internal/python/finance_data_manager.py
 
 # Run the html server and the finance server
-run finance-server="true":
-    go run ./main.go --finance-server={{finance-server}} | jq
+run:
+	air ./main.go --finance-server=true
+
+# Run the html server without the finance server
+run-without-share-server:
+	air ./main.go --finance-server=false
